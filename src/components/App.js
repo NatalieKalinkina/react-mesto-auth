@@ -1,4 +1,5 @@
 import React from 'react';
+import {BrowserRouter, Route, Routes, Navigate} from 'react-router-dom';
 import '../index.css';
 import Header from './Header';
 import Main from './Main';
@@ -8,6 +9,8 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import ImagePopup from './ImagePopup';
+import Login from './Login';
+import Register from './Register';
 import { api } from '../utils/Api.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
@@ -19,6 +22,7 @@ function App() {
   const [selectedCard, setSelectedCard] = React.useState({});
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
+  const [loggedIn, setLoggedIn] = React.useState(false);
 
   React.useEffect(() => {
     api
@@ -113,10 +117,23 @@ function App() {
   }
 
   return (
+    <BrowserRouter>
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-        <Header />
-        <Main
+        <Header email='email@mail.ru' button='Выйти'/>
+        <Routes>
+        <Route path="/" element={loggedIn ? <Main
+          onEditAvatar={handleEditAvatarClick}
+          onAddPlace={handleAddPlaceClick}
+          onEditProfile={handleEditProfileClick}
+          onCardClick={handleCardClick}
+          onCardLike={handleCardLike}
+          onCardDelete={handleCardDelete}
+          cards={cards}
+        /> : <Navigate to="/sign-in" replace />} />
+        <Route path="/sign-up" element={<Register />} />
+        <Route path="/sign-in" element={<Login />} />
+        {/* <Main
           onEditAvatar={handleEditAvatarClick}
           onAddPlace={handleAddPlaceClick}
           onEditProfile={handleEditProfileClick}
@@ -167,10 +184,11 @@ function App() {
           link={selectedCard.link}
           onClose={closeAllPopups}
         />
-
-        <Footer />
+        <Footer /> */}
+        </Routes>
       </div>
     </CurrentUserContext.Provider>
+    </BrowserRouter>
   );
 }
 
