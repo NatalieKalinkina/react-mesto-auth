@@ -130,9 +130,9 @@ function App() {
           onCardLike={handleCardLike}
           onCardDelete={handleCardDelete}
           cards={cards}
-        /> : <Navigate to="/sign-in" replace />} />
-        <Route path="/sign-up" element={<Register />} />
-        <Route path="/sign-in" element={<Login />} />
+        /> : <Navigate to="/signin" replace />} />
+        <Route path="/signup" element={<Register />} />
+        <Route path="/signin" element={<Login />} />
         {/* <Main
           onEditAvatar={handleEditAvatarClick}
           onAddPlace={handleAddPlaceClick}

@@ -3,6 +3,7 @@ import React from 'react';
 function Login() {
   return (
     <div className="login">
+        <div className='login__container'>
         <h2 className="login__title">Вход</h2>
         <form
           className="login__form"
@@ -36,7 +37,7 @@ function Login() {
           Войти
         </button>
         </form>
-       
+        </div>
       </div>
   );
 }
