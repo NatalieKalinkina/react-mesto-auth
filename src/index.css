@@ -9,6 +9,7 @@
 @import url(./blocks/register/register.css);
 @import url(./blocks/main/main.css);
 @import url(./blocks/button/button.css);
+@import url(./blocks/info/info.css);
 @import url(./blocks/profile/profile.css);
 @import url(./blocks/profile/__image/profile__image.css);
 @import url(./blocks/profile/__person/profile__person.css);
