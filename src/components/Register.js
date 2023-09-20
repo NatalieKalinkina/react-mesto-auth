@@ -2,13 +2,11 @@ import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import * as auth from '../utils/Auth.js';
 
-function Register() {
+function Register({ onRegister }) {
   const [formValue, setFormValue] = React.useState({
     email: '',
     password: ''
   });
-
-  const navigate = useNavigate();
 
   function handleChange(evt) {
     const { name, value } = evt.target;
@@ -20,13 +18,9 @@ function Register() {
 
   function handleSubmit(evt) {
     evt.preventDefault();
-    if (!formValue.email || !formValue.password) {
-      return;
-    }
-    auth.register(formValue.email, formValue.password).then(() => {
-      navigate('/sign-in', { replace: true });
-    });
+    onRegister(formValue.email, formValue.password);
   }
+
   return (
     <div className="register">
       <div className="register__container">
