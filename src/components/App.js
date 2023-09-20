@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter, Route, Routes, Navigate} from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import '../index.css';
 import Header from './Header';
 import Main from './Main';
@@ -11,8 +11,11 @@ import AddPlacePopup from './AddPlacePopup';
 import ImagePopup from './ImagePopup';
 import Login from './Login';
 import Register from './Register';
+import ProtectedRoute from './ProtectedRoute';
 import { api } from '../utils/Api.js';
+import * as auth from '../utils/Auth.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
+import { useEffect } from 'react';
 
 function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = React.useState(false);
@@ -116,78 +119,94 @@ function App() {
     setSelectedCard({});
   }
 
+  const onLogin = () => {
+    setLoggedIn(true);
+  };
+
+  // const handleTokenCheck = () => {
+  //   if (localStorage.getItem('jwt')) {
+  //     const jwt = localStorage.getItem('jwt');
+  //     auth.checkToken(jwt).then(() => {
+  //       setLoggedIn(true);
+  //       navigate('/', { replace: true });
+  //     });
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   handleTokenCheck();
+  // }, []);
+
   return (
     <BrowserRouter>
-    <CurrentUserContext.Provider value={currentUser}>
-      <div className="page">
-        <Header email='email@mail.ru' button='Выйти'/>
-        <Routes>
-        <Route path="/" element={loggedIn ? <Main
-          onEditAvatar={handleEditAvatarClick}
-          onAddPlace={handleAddPlaceClick}
-          onEditProfile={handleEditProfileClick}
-          onCardClick={handleCardClick}
-          onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
-          cards={cards}
-        /> : <Navigate to="/signin" replace />} />
-        <Route path="/signup" element={<Register />} />
-        <Route path="/signin" element={<Login />} />
-        {/* <Main
-          onEditAvatar={handleEditAvatarClick}
-          onAddPlace={handleAddPlaceClick}
-          onEditProfile={handleEditProfileClick}
-          onCardClick={handleCardClick}
-          onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
-          cards={cards}
-        />
+      <CurrentUserContext.Provider value={currentUser}>
+        <div className="page">
+          <Header email="email@mail.ru" button="Выйти" />
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute loggedIn={loggedIn}>
+                  <Main
+                    onEditAvatar={handleEditAvatarClick}
+                    onAddPlace={handleAddPlaceClick}
+                    onEditProfile={handleEditProfileClick}
+                    onCardClick={handleCardClick}
+                    onCardLike={handleCardLike}
+                    onCardDelete={handleCardDelete}
+                    cards={cards}
+                  />
+                  <EditProfilePopup
+                    isOpen={isEditProfilePopupOpen}
+                    onClose={closeAllPopups}
+                    onUpdateUser={handleUpdateUser}
+                  />
 
-        <EditProfilePopup
-          isOpen={isEditProfilePopupOpen}
-          onClose={closeAllPopups}
-          onUpdateUser={handleUpdateUser}
-        />
+                  <EditAvatarPopup
+                    isOpen={isEditAvatarPopupOpen}
+                    onClose={closeAllPopups}
+                    onUpdateAvatar={handleUpdateAvatar}
+                  />
 
-        <EditAvatarPopup
-          isOpen={isEditAvatarPopupOpen}
-          onClose={closeAllPopups}
-          onUpdateAvatar={handleUpdateAvatar}
-        />
+                  <AddPlacePopup
+                    isOpen={isAddPlacePopupOpen}
+                    onClose={closeAllPopups}
+                    onAddPlace={handleAddPlaceSubmit}
+                  />
 
-        <AddPlacePopup
-          isOpen={isAddPlacePopupOpen}
-          onClose={closeAllPopups}
-          onAddPlace={handleAddPlaceSubmit}
-        />
+                  <PopupWithForm
+                    id="4"
+                    name="confirmation"
+                    title="Вы уверены?"
+                    children={
+                      <>
+                        <button
+                          type="button"
+                          className="popup__submit-button"
+                          id="confirmation-submit-button"
+                        >
+                          Да
+                        </button>
+                      </>
+                    }
+                  />
 
-        <PopupWithForm
-          id="4"
-          name="confirmation"
-          title="Вы уверены?"
-          children={
-            <>
-              <button
-                type="button"
-                className="popup__submit-button"
-                id="confirmation-submit-button"
-              >
-                Да
-              </button>
-            </>
-          }
-        />
+                  <ImagePopup
+                    isOpen={isImagePopupOpen}
+                    name={selectedCard.name}
+                    link={selectedCard.link}
+                    onClose={closeAllPopups}
+                  />
+                  <Footer />
+                </ProtectedRoute>
+              }
+            />
 
-        <ImagePopup
-          isOpen={isImagePopupOpen}
-          name={selectedCard.name}
-          link={selectedCard.link}
-          onClose={closeAllPopups}
-        />
-        <Footer /> */}
-        </Routes>
-      </div>
-    </CurrentUserContext.Provider>
+            <Route path="/sign-up" element={<Register />} />
+            <Route path="/sign-in" element={<Login onLogin={onLogin} />} />
+          </Routes>
+        </div>
+      </CurrentUserContext.Provider>
     </BrowserRouter>
   );
 }
