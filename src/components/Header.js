@@ -10,7 +10,7 @@ function Header({ email, onSignOut }) {
   return (
     <header className="header">
       <img src={logo} className="header__logo" alt="логотип проекта Место" />
-      <div className="header__text">
+      <nav className="header__menu">
         <p className="header__email">{email}</p>
         {location.pathname === mainPage ? (
           <Link
@@ -30,7 +30,7 @@ function Header({ email, onSignOut }) {
             Войти
           </Link>
         )}
-      </div>
+      </nav>
     </header>
   );
 }
