@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
-
 import '../index.css';
 import Header from './Header';
 import Main from './Main';
@@ -30,10 +29,9 @@ function App() {
   const [cards, setCards] = React.useState([]);
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [isRegisterSuccess, setIsRegisterSuccess] = React.useState(false);
+  const [UserEmail, setUserEmail] = React.useState('');
 
   const navigate = useNavigate();
-
-  const token = localStorage.getItem('jwt');
 
   React.useEffect(() => {
     api
@@ -133,14 +131,12 @@ function App() {
       .register(email, password)
       .then(res => {
         if (res.data.email) {
-          console.log(`Регистрация ${res.data.email} прошла успешно`);
           setIsRegisterSuccess(true);
           setInfoToolTipOpen(true);
           navigate('/sign-in');
         } else {
           setIsRegisterSuccess(false);
           setInfoToolTipOpen(true);
-          console.log('Ошибка регистрации', res.data.email);
         }
       })
       .catch(err => {
@@ -152,22 +148,35 @@ function App() {
 
   const onLogin = () => {
     setLoggedIn(true);
+    navigate('/');
   };
 
+  const onSignOut = () => {
+    localStorage.removeItem('jwt');
+    setLoggedIn(false);
+    setUserEmail('');
+    navigate('/sign-in');
+  };
+
+  const token = localStorage.getItem('jwt');
+
   useEffect(() => {
-    if (localStorage.getItem('jwt')) {
-      auth.checkToken(token).then(res => {
-        if (res.email) {
+    if (token) {
+      auth
+        .checkToken(token)
+        .then(res => {
           setLoggedIn(true);
-        }
-      });
+          setUserEmail(res.data.email);
+          navigate('/');
+        })
+        .catch(err => console.log(err));
     }
-  }, [token]);
+  }, [token, navigate]);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-        <Header email="email@mail.ru" button="Выйти" />
+        <Header email={UserEmail} onSignOut={onSignOut} />
         <Routes>
           <Route
             path="/"
