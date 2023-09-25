@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import * as auth from '../utils/Auth.js';
+import { auth } from '../utils/Auth.js';
 
 function Login({ onLogin }) {
   const [formValue, setFormValue] = React.useState({
@@ -32,7 +32,7 @@ function Login({ onLogin }) {
           navigate('/', { replace: true });
         }
       })
-      .catch(err => console.log(err));
+      .catch(console.error);
   }
 
   return (

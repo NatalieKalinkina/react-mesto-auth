@@ -13,7 +13,7 @@ import Login from './Login';
 import Register from './Register';
 import ProtectedRoute from './ProtectedRoute';
 import { api } from '../utils/Api.js';
-import * as auth from '../utils/Auth.js';
+import { auth } from '../utils/Auth.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 import { useEffect } from 'react';
 import InfoToolTip from './InfoToolTip';
@@ -29,7 +29,7 @@ function App() {
   const [cards, setCards] = React.useState([]);
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [isRegisterSuccess, setIsRegisterSuccess] = React.useState(false);
-  const [UserEmail, setUserEmail] = React.useState('');
+  const [userEmail, setUserEmail] = React.useState('');
 
   const navigate = useNavigate();
 
@@ -169,14 +169,14 @@ function App() {
           setUserEmail(res.data.email);
           navigate('/');
         })
-        .catch(err => console.log(err));
+        .catch(console.error);
     }
   }, [token, navigate]);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-        <Header email={UserEmail} onSignOut={onSignOut} />
+        <Header email={userEmail} onSignOut={onSignOut} />
         <Routes>
           <Route
             path="/"
@@ -209,23 +209,7 @@ function App() {
                   onAddPlace={handleAddPlaceSubmit}
                 />
 
-                <PopupWithForm
-                  id="4"
-                  name="confirmation"
-                  title="Вы уверены?"
-                  children={
-                    <>
-                      <button
-                        type="button"
-                        className="popup__submit-button"
-                        id="confirmation-submit-button"
-                      >
-                        Да
-                      </button>
-                    </>
-                  }
-                />
-
+                <PopupWithForm id="4" name="confirmation" title="Вы уверены?" buttonText="Да" />
                 <ImagePopup
                   isOpen={isImagePopupOpen}
                   name={selectedCard.name}

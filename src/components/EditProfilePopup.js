@@ -36,38 +36,34 @@ function EditProfilePopup({ onUpdateUser, isOpen, onClose }) {
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
+      buttonText="Сохранить"
     >
-      <>
-        <input
-          type="text"
-          className="popup__text popup__text_type_name"
-          name="name"
-          id="name-input"
-          placeholder="Введите имя"
-          required
-          minLength="2"
-          maxLength="40"
-          value={name || ''}
-          onChange={handleNameChange}
-        />
-        <p className="popup__text-error name-input-error"></p>
-        <input
-          type="text"
-          className="popup__text popup__text_type_about"
-          name="about"
-          id="about-input"
-          placeholder="Введите профессию"
-          minLength="2"
-          maxLength="200"
-          required
-          value={description || ''}
-          onChange={handleDescriptionChange}
-        />
-        <p className="popup__text-error about-input-error"></p>
-        <button type="submit" className="popup__submit-button" id="profile-submit-button">
-          Сохранить
-        </button>
-      </>
+      <input
+        type="text"
+        className="popup__text popup__text_type_name"
+        name="name"
+        id="name-input"
+        placeholder="Введите имя"
+        required
+        minLength="2"
+        maxLength="40"
+        value={name || ''}
+        onChange={handleNameChange}
+      />
+      <p className="popup__text-error name-input-error"></p>
+      <input
+        type="text"
+        className="popup__text popup__text_type_about"
+        name="about"
+        id="about-input"
+        placeholder="Введите профессию"
+        minLength="2"
+        maxLength="200"
+        required
+        value={description || ''}
+        onChange={handleDescriptionChange}
+      />
+      <p className="popup__text-error about-input-error"></p>
     </PopupWithForm>
   );
 }

@@ -23,23 +23,18 @@ function EditAvatarPopup({ onUpdateAvatar, isOpen, onClose }) {
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
+      buttonText="Сохранить"
     >
-      <>
-        <input
-          type="url"
-          className="popup__text popup__text_type_avatar"
-          name="avatar"
-          placeholder="Ссылка на картинку"
-          id="avatar-input"
-          required
-          ref={avatarRef}
-        />
-        <p className="popup__text-error avatar-input-error"></p>
-
-        <button type="submit" className="popup__submit-button" id="avatar-submit-button">
-          Сохранить
-        </button>
-      </>
+      <input
+        type="url"
+        className="popup__text popup__text_type_avatar"
+        name="avatar"
+        placeholder="Ссылка на картинку"
+        id="avatar-input"
+        required
+        ref={avatarRef}
+      />
+      <p className="popup__text-error avatar-input-error"></p>
     </PopupWithForm>
   );
 }
